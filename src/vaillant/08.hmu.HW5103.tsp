@@ -104,19 +104,19 @@ namespace Hmu.Hw5103 {
 
   @inherit(r_0)
   @ext(0xb8, 0xb)
-  model HoursTotal {
+  model HmuHours {
     value: hoursum2;
   }
 
   @inherit(r_0)
   @ext(0xb9, 0xb)
-  model HoursHeating {
+  model HeatingHours {
     value: hoursum2;
   }
 
   @inherit(r_0)
   @ext(0xbc, 0xb)
-  model HoursHwc {
+  model WaterHours {
     value: hoursum2;
   }
 
@@ -219,7 +219,7 @@ namespace Hmu.Hw5103 {
   @condition(Id.Id.sw, ">=902")
   @inherit(r_1)
   @ext(0x18, 1)
-  model CompressorHc {
+  model CompressorHeating {
     @maxLength(1) ign: IGN;
     runtime: minutes4;
     cycles: cntstarts;
@@ -228,7 +228,7 @@ namespace Hmu.Hw5103 {
   @condition(Id.Id.sw, ">=902")
   @inherit(r_1)
   @ext(0x18, 0x2)
-  model CompressorHwc {
+  model CompressorWater {
     @maxLength(1) ign: IGN;
     runtime: minutes4;
     cycles: cntstarts;
@@ -244,7 +244,7 @@ namespace Hmu.Hw5103 {
 
   @inherit(r_2)
   @ext(0x14)
-  model PowerConsumptionHmu {
+  model CurrentPowerConsumption {
     @unit("W")
     value: EXP;
   }
@@ -275,7 +275,7 @@ namespace Hmu.Hw5103 {
 
   @inherit(r_3)
   @ext(0x2)
-  model YieldHwcDay {
+  model YieldWaterDay {
     @unit("kWh")
     @divisor(10)
     value: energy;
@@ -312,7 +312,7 @@ namespace Hmu.Hw5103 {
 
   @inherit(r_3)
   @ext(0x12)
-  model YieldHwcMonth {
+  model YieldWaterMonth {
     @unit("kWh")
     @divisor(10)
     value: energy;
@@ -320,20 +320,20 @@ namespace Hmu.Hw5103 {
 
   @inherit(r_3)
   @ext(0x13)
-  model CopHwcMonth {
+  model CopWaterMonth {
     @divisor(10)
     value: UIN;
   }
 
   @inherit(r_3)
   @ext(0x16)
-  model YieldHwc {
+  model YieldWater {
     value: energy;
   }
 
   @inherit(r_3)
   @ext(0x17)
-  model CopHwc {
+  model CopWater {
     @divisor(10)
     value: UIN;
   }
