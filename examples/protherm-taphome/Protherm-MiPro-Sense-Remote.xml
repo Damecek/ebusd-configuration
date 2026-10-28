@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Templates format="2" protocolVersion="89">
+  <Template revision="1.0">
+    <SuggestedCCUParameters />
+    <RevisionHistory>
+      <Revision id="1.0">Initial version</Revision>
+    </RevisionHistory>
+    <Name>Protherm MiPro Sense Remote</Name>
+    <CcuModel>PacketParserCCU</CcuModel>
+    <Producer />
+    <Model />
+    <Description />
+    <Module>
+      <Name>Protherm MiPro Sense Remote</Name>
+      <Id>-1</Id>
+      <Model>PacketParserModuleMqtt</Model>
+      <DeviceProperties>
+        <InternalPollInterval>5000</InternalPollInterval>
+        <CustomVariables>[{"Name":"TOPIC","ValueTypeId":2,"NumericValue":0,"StringValue":"0"},{"Name":"PAYLOAD","ValueTypeId":2,"NumericValue":0,"StringValue":"0"}]</CustomVariables>
+        <ListenerScriptPacketParser>TOPIC := TOSTRING(RECEIVEDMSG.TOPIC);
+PAYLOAD := TOSTRING(RECEIVEDMSG.PAYLOAD);</ListenerScriptPacketParser>
+        <IpAddress>MQTT_BROKER_IP</IpAddress>
+        <Port>1883</Port>
+        <RootTopic>GeniaAir-split/#</RootTopic>
+      </DeviceProperties>
+      <Devices>
+        <Device>
+          <Name>Hlavní kohout topení</Name>
+          <Model>PacketParserReedContact</Model>
+          <Id>-2</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <ReadScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Hc1PumpStatus/get", "");</ReadScriptPacketParser>
+            <InternalPollInterval>5000</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/Hc1PumpStatus"
+    Rc := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END</ListenerScriptPacketParser>
+            <OnStateIconId>72</OnStateIconId>
+            <OffStateIconId>73</OffStateIconId>
+            <OnStateName>${general_open}</OnStateName>
+            <OffStateName>${general_closed}</OffStateName>
+            <ReadStateScriptPacketParser />
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Humidity</Name>
+          <Model>PacketParserVariable</Model>
+          <Id>-3</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <SerializedValueLogTypeConversions>{"3":"{\"ValueLogTypeConversionTypeId\":3,\"SerializedValueLogTypeConversion\":\"{\\\"Value1OnInput\\\":0,\\\"Value1OnOutput\\\":0,\\\"Value2OnInput\\\":1,\\\"Value2OnOutput\\\":0.01,\\\"SourceValueLogTypes\\\":[62],\\\"TargetValueLogType\\\":3}\"}"}</SerializedValueLogTypeConversions>
+            <ReadScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/RoomHumidity/get", "");</ReadScriptPacketParser>
+            <InternalPollInterval>15000</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/RoomHumidity"
+    Va := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END;</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <IsReadOnly>False</IsReadOnly>
+            <ReadStateScriptPacketParser />
+            <WriteStateScriptPacketParser />
+            <IconId>0</IconId>
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Outside Temperature</Name>
+          <Model>PacketParserAnalogInput</Model>
+          <Id>-4</Id>
+          <DeviceProperties>
+            <DeviceType>3003</DeviceType>
+            <SerializedValueLogTypeConversions>{"5":"{\"ValueLogTypeConversionTypeId\":3,\"SerializedValueLogTypeConversion\":\"{\\\"Value1OnInput\\\":0,\\\"Value1OnOutput\\\":0,\\\"Value2OnInput\\\":1,\\\"Value2OnOutput\\\":1,\\\"SourceValueLogTypes\\\":[55],\\\"TargetValueLogType\\\":5}\"}"}</SerializedValueLogTypeConversions>
+            <ReadScriptPacketParser />
+            <InternalPollInterval>300000</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/DisplayedOutsideTemp"
+    An := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <ReadInputLevelScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/DisplayedOutsideTemp/get", "");</ReadInputLevelScriptPacketParser>
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Spotřeba energie podlahového topení tento měsíc</Name>
+          <Model>PacketParserVariable</Model>
+          <Id>-5</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <SerializedValueLogTypeConversions>{"59":"{\"ValueLogTypeConversionTypeId\":3,\"SerializedValueLogTypeConversion\":\"{\\\"Value1OnInput\\\":0,\\\"Value1OnOutput\\\":0,\\\"Value2OnInput\\\":1,\\\"Value2OnOutput\\\":1,\\\"SourceValueLogTypes\\\":[62],\\\"TargetValueLogType\\\":59}\"}"}</SerializedValueLogTypeConversions>
+            <ReadScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/PrEnergySumHcThisMonth/get", "");</ReadScriptPacketParser>
+            <InternalPollInterval>3600000</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/PrEnergySumHcThisMonth"
+    Va := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END;</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <IsReadOnly>True</IsReadOnly>
+            <ReadStateScriptPacketParser />
+            <WriteStateScriptPacketParser />
+            <IconId>0</IconId>
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Spotřeba energie teplé vody tento měsíc</Name>
+          <Model>PacketParserVariable</Model>
+          <Id>-6</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <SerializedValueLogTypeConversions>{"59":"{\"ValueLogTypeConversionTypeId\":3,\"SerializedValueLogTypeConversion\":\"{\\\"Value1OnInput\\\":0,\\\"Value1OnOutput\\\":0,\\\"Value2OnInput\\\":1,\\\"Value2OnOutput\\\":1,\\\"SourceValueLogTypes\\\":[62],\\\"TargetValueLogType\\\":59}\"}"}</SerializedValueLogTypeConversions>
+            <ReadScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/PrEnergySumHwcThisMonth/get", "");</ReadScriptPacketParser>
+            <InternalPollInterval>3600000</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/PrEnergySumHwcThisMonth"
+    Va := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END;</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <IsReadOnly>True</IsReadOnly>
+            <ReadStateScriptPacketParser />
+            <WriteStateScriptPacketParser />
+            <IconId>0</IconId>
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>${dashboard_deviceThermostat}</Name>
+          <Model>PacketParserThermostat</Model>
+          <Id>-7</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <ReadScriptPacketParser />
+            <InternalPollInterval>59002</InternalPollInterval>
+            <CustomVariables>[]</CustomVariables>
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/Z2RoomTemp"
+    Te := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+ELSEIF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/Z2DayTemp"
+    Se := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+# ELSEIF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/RoomHumidity"
+#     Hu := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <MinTemperature>19</MinTemperature>
+            <MaxTemperature>24</MaxTemperature>
+            <ReadCurrentTemperatureScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Z2RoomTemp/get", "");</ReadCurrentTemperatureScriptPacketParser>
+            <ReadTemperatureSetPointScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Z2DayTemp/get", "");</ReadTemperatureSetPointScriptPacketParser>
+            <ReadHumidityScriptPacketParser />
+            <WriteTemperatureSetPointScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Z2DayTemp/set", TOSTRING(Se));</WriteTemperatureSetPointScriptPacketParser>
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Termostat vody podlahového topení</Name>
+          <Model>PacketParserThermostat</Model>
+          <Id>-8</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <ReadScriptPacketParser />
+            <InternalPollInterval>4508</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser>[]</ServiceAttributesScriptsPacketParser>
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/Hc1ActualFlowTempDesired"
+    Te := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+ELSEIF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/Hc1FlowTemp"
+    Se := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END;</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <MinTemperature>20</MinTemperature>
+            <MaxTemperature>40</MaxTemperature>
+            <ReadCurrentTemperatureScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Hc1ActualFlowTempDesired/get", "");</ReadCurrentTemperatureScriptPacketParser>
+            <ReadTemperatureSetPointScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/Hc1FlowTemp/get", "");</ReadTemperatureSetPointScriptPacketParser>
+            <ReadHumidityScriptPacketParser />
+            <WriteTemperatureSetPointScriptPacketParser />
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Termostat zásobníku teplé vody</Name>
+          <Model>PacketParserThermostat</Model>
+          <Id>-9</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <ReadScriptPacketParser />
+            <InternalPollInterval>2500</InternalPollInterval>
+            <CustomVariables />
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/HwcStorageTemp"
+    Te := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+ELSEIF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/HwcTempDesired"
+    Se := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <MinTemperature>40</MinTemperature>
+            <MaxTemperature>70</MaxTemperature>
+            <ReadCurrentTemperatureScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/HwcStorageTemp/get", "");</ReadCurrentTemperatureScriptPacketParser>
+            <ReadTemperatureSetPointScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/HwcTempDesired/get", "");</ReadTemperatureSetPointScriptPacketParser>
+            <ReadHumidityScriptPacketParser />
+            <WriteTemperatureSetPointScriptPacketParser />
+          </DeviceProperties>
+        </Device>
+        <Device>
+          <Name>Water Pressure</Name>
+          <Model>PacketParserAnalogInput</Model>
+          <Id>-10</Id>
+          <DeviceProperties>
+            <DeviceType>0</DeviceType>
+            <SerializedValueLogTypeConversions>{"85":"{\"ValueLogTypeConversionTypeId\":3,\"SerializedValueLogTypeConversion\":\"{\\\"Value1OnInput\\\":0,\\\"Value1OnOutput\\\":0,\\\"Value2OnInput\\\":1,\\\"Value2OnOutput\\\":1,\\\"SourceValueLogTypes\\\":[55],\\\"TargetValueLogType\\\":85}\"}"}</SerializedValueLogTypeConversions>
+            <ReadScriptPacketParser>MQTTPUBLISH("GeniaAir-split/ctls3/WaterPressure/get", "");</ReadScriptPacketParser>
+            <InternalPollInterval>3000</InternalPollInterval>
+            <CustomVariables>[]</CustomVariables>
+            <ServiceAttributesScriptsPacketParser />
+            <ServiceActionsScriptsPacketParser />
+            <ListenerScriptPacketParser>IF RECEIVEDMSG.TOPIC = "GeniaAir-split/ctls3/WaterPressure"
+    An := PARSEJSON(TOSTRING(RECEIVEDMSG.PAYLOAD), "value.value");
+END</ListenerScriptPacketParser>
+            <ShouldDoPeriodicWrite>False</ShouldDoPeriodicWrite>
+            <ReadInputLevelScriptPacketParser />
+          </DeviceProperties>
+        </Device>
+      </Devices>
+    </Module>
+  </Template>
+</Templates>

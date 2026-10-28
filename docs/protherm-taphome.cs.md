@@ -2,12 +2,23 @@
 
 Ověřeno 28. 10. 2026: tepelné čerpadlo **Protherm GeniaAir Split HA 10-5 OS + HA 12-5 WSB**, regulátor MiPro Sense, eBUS Adapter Stick C6 přes Wi-Fi a Debian 13 amd64. Oficiální **ebusd 26.1 s MQTT** běží jako systemd služba; TapHome přijímá hodnoty a posílá čtecí/zapisovací požadavky přes MQTT broker. Home Assistant ani Docker nejsou potřeba.
 
-## Co je potřeba
+## Prerekvizity
 
 - [Protherm GeniaAir Split – výrobce](https://www.protherm.cz/pro-nase-zakazniky/produkty/tepelne-cerpadlo-geniaair-split-14592.html) a [prospekt s hydraulickým modulem WSB](https://www.protherm.cz/files/downloads/prospekty/prospekt-geniaair-split-26052025-3020929.pdf).
 - [eBUS Adapter Stick C6 – oficiální hardware a zapojení](https://adapter.ebusd.eu/v5-c6/stick). Zapojení na eBUS proveď podle dokumentace adaptéru a čerpadla. Ve webovém rozhraní C6 nastav enhanced protokol `ens`, TCP port `9999` a stabilní LAN adresu.
 - Linuxový server; zde HP t655 s Debianem 13. [ebusd – oficiální repozitář](https://github.com/john30/ebusd), [vydání 26.1](https://github.com/john30/ebusd/releases/tag/26.1).
 - MQTT broker v LAN. Může běžet [přímo v TapHome](https://taphome.com/en/docs/integration/packet-parser/mqtt-broker/) nebo externě; níže se připojují ebusd i TapHome ke **stejnému brokeru**.
+
+### Packet Parser šablony v TapHome
+
+V této sestavě se používají dvě oddělené šablony:
+
+1. **eBUS Adapter Shield C6 Stick** — [oficiální šablona a popis](https://taphome.com/en/compatibility/ebus-adapter-shield-c6-stick/), [oficiální repozitář šablon](https://github.com/taphome-official/packetparser_templates). Sleduje stav adaptéru; samotné hodnoty čerpadla řeší další modul. Její MQTT prefix ověř podle skutečného nastavení adaptéru. Tento návod ponechává C6 v režimu `ens` s externím ebusd; kvůli šabloně není potřeba přepínat na micro-ebusd.
+2. **Protherm MiPro Sense Remote** — [MQTT XML šablona z této instalace](../examples/protherm-taphome/Protherm-MiPro-Sense-Remote.xml). Obsahuje čtení tlaku, vlhkosti, venkovní teploty, měsíčních energií, stav čerpadla a tři termostatové prvky. Pokojový termostat zóny 2 má také zápis `Z2DayTemp/set`; zbývající dva termostatové prvky mají zapisovací skript prázdný.
+
+Oficiální šablony jsou v aplikaci pod **Hardware → Packet Parser → Přidat ze šablony**. Vlastní přiložené XML importuj jako Packet Parser šablonu; poté nastav broker místo `MQTT_BROKER_IP`, port `1883` a root topic `GeniaAir-split/#`. Přihlašovací údaje nastav podle svého brokeru. XML neobsahuje heslo ani identifikátor domácnosti.
+
+Šablona zachovává původní skripty, převody, intervaly čtení i mapování `Te`/`Se`; nový import do TapHome nebyl automatizovaně testován. Prvek „Hlavní kohout topení“ čte `Hc1PumpStatus` — jde o indikaci stavu čerpadla, nikoli povel ventilu. Při importu do jiné instalace ověř význam prvků a zónu 2 před použitím zápisu. C6 monitorovací šablona je doplněk; pro přenos hodnot čerpadla je podstatný MQTT modul Protherm a níže popsaný ebusd.
 
 ## 1. Vyber správné definice
 
@@ -68,7 +79,7 @@ Kontrola profilu má najít 567 zpráv. Jednotka používá `--mqttjson`, prefix
 
 ## 3. Nastav TapHome
 
-V **Hardware → Packet Parser → MQTT** nastav stejný broker, port `1883` a přihlašovací údaje. Root topic je `GeniaAir-split/#`.
+Použij MQTT XML šablonu z prerekvizit. V **Hardware → Packet Parser → MQTT** nastav stejný broker, port `1883` a přihlašovací údaje. Root topic je `GeniaAir-split/#`. Pokud chceš modul sestavit ručně, následující skripty ukazují stejný princip.
 
 Příklad pro **WaterPressure**, analogový vstup. Čtecí skript:
 
