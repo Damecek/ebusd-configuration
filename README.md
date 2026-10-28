@@ -2,6 +2,8 @@
 
 This repository serves vendor specific configuration files for [ebusd](https://github.com/john30/ebusd).
 
+Český návod: [Protherm GeniaAir Split v TapHome přes eBUS C6](docs/protherm-taphome.cs.md).
+
 
 **WARNING**: There is absolutely no warranty at all for using any of the files
 provided here and you should definitely know what you're doing.

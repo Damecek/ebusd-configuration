@@ -1,0 +1,101 @@
+{
+  "source_repository": "https://github.com/Damecek/ebusd-configuration",
+  "source_commit": "779667594669fde6e9f7bf2839b96ace19f61fb0",
+  "build": "Node22; npm ci --ignore-scripts --no-audit --no-fund; npm run compile-en",
+  "validation": "ebusd26.1 --checkconfig:567 messages; confirmed HMU00/0902/5103, CTLS3/0709/3804, VWZIO/0902/5103",
+  "aliases": {
+    "vaillant/76.vwzio.csv": "vaillant/76.vwz.csv"
+  },
+  "adaptations": [
+    {
+      "message": "StatSolarEnergySum",
+      "original_id": "1000ffff01000000",
+      "candidate_id": "1000ffff010000",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatSolarEnergySumHc",
+      "original_id": "1000ffff01030000",
+      "candidate_id": "1000ffff010300",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatSolarEnergySumHwc",
+      "original_id": "1000ffff01040000",
+      "candidate_id": "1000ffff010400",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatEnvironmentEnergySum",
+      "original_id": "1000ffff02000000",
+      "candidate_id": "1000ffff020000",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatEnvironmentEnergySumHc",
+      "original_id": "1000ffff02030000",
+      "candidate_id": "1000ffff020300",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatEnvironmentEnergySumHwc",
+      "original_id": "1000ffff02040000",
+      "candidate_id": "1000ffff020400",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatEnvironmentEnergySumCool",
+      "original_id": "1000ffff02050000",
+      "candidate_id": "1000ffff020500",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatElectricEnergySum",
+      "original_id": "1000ffff03000000",
+      "candidate_id": "1000ffff030000",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatElectricEnergySumHc",
+      "original_id": "1000ffff03030000",
+      "candidate_id": "1000ffff030300",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatElectricEnergySumHwc",
+      "original_id": "1000ffff03040000",
+      "candidate_id": "1000ffff030400",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatElectricEnergySumCool",
+      "original_id": "1000ffff03050000",
+      "candidate_id": "1000ffff030500",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatFuelSum",
+      "original_id": "1000ffff04000000",
+      "candidate_id": "1000ffff040000",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatFuelSumHc",
+      "original_id": "1000ffff04030000",
+      "candidate_id": "1000ffff040300",
+      "master_ignored_byte": "00"
+    },
+    {
+      "message": "StatFuelSumHwc",
+      "original_id": "1000ffff04040000",
+      "candidate_id": "1000ffff040400",
+      "master_ignored_byte": "00"
+    }
+  ],
+  "sha256": {
+    "csv/broadcast.csv": "1563768134d981afb5dda36934e410e033588deaf877ef33b948e14c1db26943",
+    "csv/vaillant/08.hmu.HW5103.csv": "28a2ee752d4280d618c799a80f05f10a9fa9e6e270bb070080a99af75ab888c4",
+    "csv/vaillant/15.ctls3.csv": "8b407bc826676f4f8aad6a6d74627ab2e490eb657efed07371bcf7308249d78b",
+    "csv/vaillant/76.vwzio.csv": "ddd849d1e1357ce6dbd5af50b27aff353815715d2cfa5b75fa2a34700d0eacd0"
+  }
+}

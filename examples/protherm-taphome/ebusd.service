@@ -1,0 +1,40 @@
+# Official ebusd 26.1; confirmed devices and full JSON contract for TapHome.
+[Unit]
+Description=eBUS daemon with TapHome MQTT
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+User=ebusd
+Group=ebusd
+SupplementaryGroups=dialout
+# Root-owned mode 0600; EBUSD_DEVICE and confirmed MQTT settings.
+# ebusd supports EBUSD_* options; password is never put in argv.
+EnvironmentFile=/etc/ebusd/telemetry.env
+EnvironmentFile=/etc/ebusd/mqtt.env
+ExecStartPre=/usr/bin/test -d /etc/ebusd/telemetry-csv
+ExecStart=/usr/bin/ebusd --foreground --configpath=/etc/ebusd/telemetry-csv --scanconfig=off --pollinterval=5 --localhost --updatecheck=off --mqttjson --log=all:notice --log=update:error --log=other:error
+Restart=on-failure
+RestartSec=15s
+TimeoutStopSec=20s
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+UMask=0077
+MemoryMax=256M
+TasksMax=32
+StandardOutput=journal
+StandardError=journal
+LogRateLimitIntervalSec=30s
+LogRateLimitBurst=100
+
+[Install]
+WantedBy=multi-user.target
